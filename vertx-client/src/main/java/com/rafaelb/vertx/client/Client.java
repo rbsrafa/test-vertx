@@ -23,6 +23,7 @@ public class Client {
     private static final Logger logger = LogManager.getLogger(Client.class);
 
     public static final int SERVER_PORT = 8585;
+    public static final String SERVER_HOST = "172.22.0.20";
     private static final boolean USE_NATIVE_TRANSPORT = Boolean
             .parseBoolean(System.getenv().getOrDefault("USE_NATIVE_TRANSPORT", "true").toLowerCase());
 
@@ -43,8 +44,8 @@ public class Client {
 
         RequestOptions requestOptions = new RequestOptions()
                 .setTimeout(2000)
-                .setPort(8585)
-                .setHost("172.22.0.20");
+                .setPort(SERVER_PORT)
+                .setHost(SERVER_HOST);
 
         while (true) {
             client.request(requestOptions, ar1 -> {
