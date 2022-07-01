@@ -91,6 +91,12 @@ cat /proc/sys/net/ipv4/tcp_retries2
 15
 ```
 
+Don't forget to remove the above rules when you're finished:
+```shell
+sudo iptables -D FORWARD -p tcp --sport 8585 -s 172.22.0.20 --tcp-flags FIN FIN -j DROP
+sudo iptables -D FORWARD -p tcp --sport 8585 -s 172.22.0.20 --tcp-flags RST RST -j DROP
+```
+
 ## Proposed Solution
 
 Vertx supports native transport in Linux machines, the tcp_retries relates to the Netty 
