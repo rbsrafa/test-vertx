@@ -20,37 +20,47 @@ public class Client {
         client.start();
     }
 
-
     private static final Logger logger = LogManager.getLogger(Client.class);
-    private int requestNumber = 1;
+
+    public static final int SERVER_PORT = 8585;
     private static final boolean USE_NATIVE_TRANSPORT = Boolean
             .parseBoolean(System.getenv().getOrDefault("USE_NATIVE_TRANSPORT", "true").toLowerCase());
-    public static final int SERVER_PORT = 8585;
+
 
     public void start() throws InterruptedException {
-        VertxOptions vertxOptions = new VertxOptions().setPreferNativeTransport(true);
+        VertxOptions vertxOptions = new VertxOptions().setPreferNativeTransport(USE_NATIVE_TRANSPORT);
         Vertx vertx = Vertx.vertx(vertxOptions);
         logger.info("Is native transport: {}", vertx.isNativeTransportEnabled());
 
         HttpClientOptions clientOptions = new HttpClientOptions()
                 .setMaxPoolSize(1)
                 .setMaxWaitQueueSize(2)
-                .setProtocolVersion(HttpVersion.HTTP_2)
-                .setHttp2ClearTextUpgrade(false)
-                .setTcpUserTimeout(10000)
-                .setUseAlpn(true)
-                .setTcpFastOpen(true);
+                .setProtocolVersion(HttpVersion.HTTP_2);
+//                .setTcpUserTimeout(10000);
 
         logger.info("Starting client with config: {}", clientOptions.toJson());
         HttpClient client = vertx.createHttpClient(clientOptions);
 
+        RequestOptions requestOptions = new RequestOptions()
+                .setTimeout(2000)
+                .setPort(8585)
+                .setHost("172.22.0.20");
 
         while (true) {
-            client.request(HttpMethod.GET, new RequestOptions().setPort(SERVER_PORT).setHost("172.22.0.20"), ar -> {
-                logger.info("Status Code: {}, message: {}", ar.statusCode(), ar.statusMessage());
-            }).setTimeout(2000).end();
+            client.request(requestOptions, ar1 -> {
+                if (ar1.succeeded()) {
+                    ar1.result().send(res -> {
+                        if (res.succeeded()) {
+                            logger.info("SUCCESS - Status Code: {}, message: {}", res.result().statusCode(), res.result().statusMessage());
+                        } else {
+                            logger.info("FAILURE - cause: {} - message: {}", res.cause().getCause(), res.cause().getMessage());
+                        }
+                    });
+                } else {
+                    logger.info("Something went wrong: {}", ar1.cause().getMessage());
+                }
+            });
             Thread.sleep(1000);
         }
-
     }
 }

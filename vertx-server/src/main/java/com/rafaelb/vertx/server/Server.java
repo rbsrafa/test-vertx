@@ -18,6 +18,7 @@ public class Server {
     }
 
     public static final Logger logger = LogManager.getLogger(Server.class);
+
     public static final int PORT = 8585;
     private static final boolean USE_NATIVE_TRANSPORT = Boolean
             .parseBoolean(System.getenv().getOrDefault("USE_NATIVE_TRANSPORT", "true").toLowerCase());
@@ -25,7 +26,7 @@ public class Server {
     public void start() {
 
         // Create Vertx
-        VertxOptions options = new VertxOptions().setPreferNativeTransport(true);
+        VertxOptions options = new VertxOptions().setPreferNativeTransport(USE_NATIVE_TRANSPORT);
         Vertx vertx = Vertx.vertx(options);
 
         // Create HTTP Server

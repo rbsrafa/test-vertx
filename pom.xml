@@ -23,7 +23,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
-    <vertx.version>3.9.9-OPENET-SNAPSHOT</vertx.version>
+    <vertx.version>4.3.2-SNAPSHOT</vertx.version>
     <log4j.version>2.5</log4j.version>
     <netty.transport.native.epoll.version>4.1.68.Final</netty.transport.native.epoll.version>
 

@@ -8,8 +8,8 @@ services:
     networks:
       vertx_test_net:
         ipv4_address: 172.22.0.20
-#    environment:
-#      - USE_NATIVE_TRANSPORT=${USE_NATIVE_TRANSPORT}
+    environment:
+      - USE_NATIVE_TRANSPORT=false
     ports:
       - 8585:8585
     healthcheck:
@@ -24,8 +24,8 @@ services:
     networks:
       vertx_test_net:
         ipv4_address: 172.22.0.10
-#    environment:
-#      - USE_NATIVE_TRANSPORT=${USE_NATIVE_TRANSPORT}
+    environment:
+      - USE_NATIVE_TRANSPORT=false
     depends_on:
       - vertx-server
 
