@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+  vertx-server:
+    hostname: "vertx-server"
+    image: rafaelb/vertx-server:1.0.0-SNAPSHOT
+    networks:
+      vertx_test_net:
+        ipv4_address: 172.22.0.20
+#    environment:
+#      - USE_NATIVE_TRANSPORT=${USE_NATIVE_TRANSPORT}
+    ports:
+      - 8585:8585
+    healthcheck:
+      test: "curl -f http://localhost:8585"
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  vertx-client:
+    hostname: "vertx-server"
+    image: rafaelb/vertx-client:1.0.0-SNAPSHOT
+    networks:
+      vertx_test_net:
+        ipv4_address: 172.22.0.10
+#    environment:
+#      - USE_NATIVE_TRANSPORT=${USE_NATIVE_TRANSPORT}
+    depends_on:
+      - vertx-server
+
+networks:
+  vertx_test_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24
