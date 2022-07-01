@@ -35,8 +35,8 @@ public class Client {
         HttpClientOptions clientOptions = new HttpClientOptions()
                 .setMaxPoolSize(1)
                 .setMaxWaitQueueSize(2)
-                .setProtocolVersion(HttpVersion.HTTP_2);
-//                .setTcpUserTimeout(10000);
+                .setProtocolVersion(HttpVersion.HTTP_2)
+                .setTcpUserTimeout(10000);
 
         logger.info("Starting client with config: {}", clientOptions.toJson());
         HttpClient client = vertx.createHttpClient(clientOptions);
